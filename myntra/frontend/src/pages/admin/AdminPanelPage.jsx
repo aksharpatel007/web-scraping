@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { adminApi } from "../../lib/api";
+import { adminApi, getApiErrorMessage } from "../../lib/api";
 import { mockProducts } from "../../lib/mockProducts";
 
 const AdminPanelPage = () => {
@@ -11,7 +11,8 @@ const AdminPanelPage = () => {
         try {
             const { data } = await adminApi.analytics();
             setAnalytics(data);
-        } catch {
+        } catch (error) {
+            console.error("Failed to load analytics", error);
             setAnalytics({ users: 0, products: mockProducts.length, orders: 0, revenue: 0 });
         }
     };
@@ -26,7 +27,7 @@ const AdminPanelPage = () => {
         try {
             const { data } = await adminApi.importCsv(formData);
             setCsvStatus(`${data.message}. Processed: ${data.processed}`);
-        } catch {
+        } catch (error) {
             const text = await file.text();
             const rows = text.split("\n").filter(Boolean);
             const mapped = rows.slice(1).map((line, index) => {
@@ -34,7 +35,7 @@ const AdminPanelPage = () => {
                 return { id: `csv-${index}`, title, brand, category, price };
             });
             setUploadedProducts(mapped);
-            setCsvStatus(`Parsed locally. Loaded ${mapped.length} products.`);
+            setCsvStatus(`${getApiErrorMessage(error, "Upload failed")} Parsed locally. Loaded ${mapped.length} products.`);
         }
     };
 

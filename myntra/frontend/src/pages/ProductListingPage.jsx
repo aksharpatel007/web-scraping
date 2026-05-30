@@ -77,6 +77,43 @@ const mapRowToProduct = (row) => ({
     image: row["Image URL"] || row["Image"] || row["image"] || "",
 });
 
+const displayTypes = [
+    "Premium Pick",
+    "Everyday Essential",
+    "Urban Classic",
+    "Signature Drop",
+    "Style Edit",
+    "Luxe Favorite",
+];
+
+const displayNames = [
+    "Aurelia",
+    "Nova",
+    "Solis",
+    "Velora",
+    "Elara",
+    "Marq",
+    "Orion",
+    "Nexa",
+];
+
+const pickSeededValue = (seed, values) => {
+    const text = String(seed || "");
+    let hash = 0;
+
+    for (let index = 0; index < text.length; index++) {
+        hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+    }
+
+    return values[hash % values.length];
+};
+
+const enrichProduct = (product) => ({
+    ...product,
+    displayType: pickSeededValue(`${product.id}-type`, displayTypes),
+    displayName: pickSeededValue(`${product.id}-name`, displayNames),
+});
+
 const categoryLabels = {
     watch: "Watches",
     tshirt: "T-Shirts",
@@ -122,7 +159,7 @@ const formatCategoryLabel = (value) => {
         .replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
-    const categoryOrder = ["watch", "shoes", "tshirt", "bag", "perfume"];
+const categoryOrder = ["watch", "shoes", "tshirt", "bag", "perfume"];
 
 const ProductListingPage = () => {
     const [products, setProducts] = useState([]);
@@ -201,7 +238,7 @@ const ProductListingPage = () => {
             })
             .then((text) => {
                 const rows = parseCSV(text);
-                const mapped = rows.map(mapRowToProduct);
+                const mapped = rows.map(mapRowToProduct).map(enrichProduct);
                 if (mounted) {
                     setProducts(mapped);
                     setLoading(false);

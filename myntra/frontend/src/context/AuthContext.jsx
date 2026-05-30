@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { authApi } from "../lib/api";
+import { authApi, getApiErrorMessage } from "../lib/api";
 
 const AuthContext = createContext(null);
 
@@ -45,7 +45,8 @@ export const AuthProvider = ({ children }) => {
             try {
                 const { data } = await authApi.me();
                 setUser(data.user);
-            } catch {
+            } catch (error) {
+                console.error("Failed to hydrate auth session", error);
                 setUser(null);
                 setAuthSession(false);
             } finally {
@@ -57,23 +58,36 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const signup = async (payload) => {
-        const { data } = await authApi.signup(payload);
-        setUser(data.user);
-        setAuthSession(true);
-        return data;
+        try {
+            const { data } = await authApi.signup(payload);
+            setUser(data.user);
+            setAuthSession(true);
+            return data;
+        } catch (error) {
+            throw new Error(getApiErrorMessage(error, "Unable to sign up. Please try again."));
+        }
     };
 
     const login = async (payload) => {
-        const { data } = await authApi.login(payload);
-        setUser(data.user);
-        setAuthSession(true);
-        return data;
+        try {
+            const { data } = await authApi.login(payload);
+            setUser(data.user);
+            setAuthSession(true);
+            return data;
+        } catch (error) {
+            throw new Error(getApiErrorMessage(error, "Unable to login. Please check your credentials."));
+        }
     };
 
     const logout = async () => {
-        await authApi.logout();
-        setUser(null);
-        setAuthSession(false);
+        try {
+            await authApi.logout();
+        } catch (error) {
+            console.error("Logout request failed", error);
+        } finally {
+            setUser(null);
+            setAuthSession(false);
+        }
     };
 
     const addToCart = (product) => {

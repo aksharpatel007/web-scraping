@@ -13,8 +13,8 @@ const SignupPage = () => {
         try {
             await signup(form);
             navigate("/dashboard");
-        } catch {
-            setError("Unable to sign up. Check backend availability.");
+        } catch (error) {
+            setError(error.message || "Unable to sign up. Check backend availability.");
         }
     };
 

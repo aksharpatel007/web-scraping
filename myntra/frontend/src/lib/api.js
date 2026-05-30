@@ -7,6 +7,14 @@ export const api = axios.create({
     withCredentials: true,
 });
 
+export const getApiErrorMessage = (error, fallback = "Something went wrong. Please try again.") => {
+    return (
+        error?.response?.data?.message ||
+        error?.message ||
+        fallback
+    );
+};
+
 export const authApi = {
     signup: (payload) => api.post("/auth/signup", payload),
     login: (payload) => api.post("/auth/login", payload),

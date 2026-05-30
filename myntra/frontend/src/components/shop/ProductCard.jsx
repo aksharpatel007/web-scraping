@@ -9,12 +9,8 @@ const ProductCard = ({ product }) => {
     const liked = wishlist.some((item) => item.id === product.id);
     const rating = typeof product.rating === "number" ? product.rating.toFixed(1) : null;
     const ratingCount = Number.isFinite(product.ratingCount) ? product.ratingCount : null;
-    const typeLabel = product.category
-        ? product.category
-              .split("-")
-              .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(" ")
-        : "Product";
+    const typeLabel = product.displayType || "Product";
+    const displayName = product.displayName || product.title;
 
     return (
         <motion.article
@@ -51,7 +47,7 @@ const ProductCard = ({ product }) => {
                 <div className="flex items-start justify-between gap-3">
                     <div>
                         <p className="text-xs uppercase tracking-[0.28em] text-emerald">{product.brand}</p>
-                        <h3 className="line-clamp-1 text-base font-semibold text-ivory transition-colors group-hover:text-white">{product.title}</h3>
+                        <h3 className="line-clamp-1 text-base font-semibold text-ivory transition-colors group-hover:text-white">{displayName}</h3>
                     </div>
                     <button onClick={() => toggleWishlist(product)} className="rounded-full border border-white/10 bg-white/5 p-2 transition-transform duration-300 hover:scale-110 hover:border-emerald/40">
                         <Heart size={18} className={liked ? "fill-emerald text-emerald" : "text-mist transition-colors group-hover:text-emerald"} />

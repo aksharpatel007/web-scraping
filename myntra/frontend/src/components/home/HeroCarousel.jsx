@@ -86,7 +86,7 @@ const HeroCarousel = () => {
                     alt={current.title}
                     loading="eager"
                     decoding="async"
-                    fetchPriority="high"
+                    fetchpriority="high"
                     className="absolute inset-0 h-full w-full object-cover object-center opacity-80 sm:object-[center_30%] lg:opacity-70"
                     initial={{ scale: 1.05, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -138,7 +138,7 @@ const HeroCarousel = () => {
 
             {/* Navigation Arrows */}
             <div className="absolute inset-y-0 left-0 z-20 hidden items-center px-4 sm:flex opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <motion.button 
+                <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={prevSlide}
@@ -148,7 +148,7 @@ const HeroCarousel = () => {
                 </motion.button>
             </div>
             <div className="absolute inset-y-0 right-0 z-20 hidden items-center px-4 sm:flex opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <motion.button 
+                <motion.button
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={nextSlide}

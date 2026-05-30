@@ -13,8 +13,8 @@ const LoginPage = () => {
         try {
             await login(form);
             navigate("/dashboard");
-        } catch {
-            setError("Unable to login. Use backend credentials or sign up first.");
+        } catch (error) {
+            setError(error.message || "Unable to login. Use backend credentials or sign up first.");
         }
     };
 
