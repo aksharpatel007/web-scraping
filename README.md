@@ -1,4 +1,4 @@
-# Web Scraping Projects
+# Web Scraping
 
 This workspace contains two web scraping projects with clear, practical use cases. The goal is to collect online data, clean it, store it in a usable format, and present it in a simple structure for analysis or product display.
 
